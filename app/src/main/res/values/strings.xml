@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Camera Pro</string>
+    <string name="mode_photo">PHOTO</string>
+    <string name="mode_portrait">PORTRAIT</string>
+    <string name="capture">Capture</string>
+    <string name="processing">Processing…</string>
+    <string name="saved">Saved to Gallery</string>
+</resources>
