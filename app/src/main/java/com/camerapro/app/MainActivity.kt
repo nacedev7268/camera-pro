@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -21,7 +22,6 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.google.android.material.button.MaterialButton
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.ExecutorService
@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupZoomControls() {
         val zoomLevels = listOf(1.0f, 1.5f, 2.0f, 2.5f, 3.0f)
         for (level in zoomLevels) {
-            val btn = MaterialButton(this)
+            val btn = Button(this)
             btn.text = "${level}x"
             btn.textSize = 12f
             btn.setPadding(16, 8, 16, 8)
@@ -97,25 +97,25 @@ class MainActivity : AppCompatActivity() {
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
         cameraProviderFuture.addListener({
-            val cameraProvider = cameraProviderFuture.get()
-
-            val preview = Preview.Builder().build().also {
-                it.setSurfaceProvider(viewFinder.surfaceProvider)
-            }
-
-            imageCapture = ImageCapture.Builder()
-                .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
-                .build()
-
-            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-
             try {
+                val cameraProvider = cameraProviderFuture.get()
+
+                val preview = Preview.Builder().build().also {
+                    it.setSurfaceProvider(viewFinder.surfaceProvider)
+                }
+
+                imageCapture = ImageCapture.Builder()
+                    .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
+                    .build()
+
+                val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+
                 cameraProvider.unbindAll()
                 camera = cameraProvider.bindToLifecycle(
                     this, cameraSelector, preview, imageCapture
                 )
             } catch (exc: Exception) {
-                Toast.makeText(this, "Binding failed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, "Camera error: ${exc.message}", Toast.LENGTH_LONG).show()
             }
         }, ContextCompat.getMainExecutor(this))
     }
